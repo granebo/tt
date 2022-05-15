@@ -1,5 +1,15 @@
 from flask import Flask, render_template, request
 import mysql.connector
+import json
+
+
+def open_db():
+    # Import Credentials
+    with open('credentials.json') as creds:
+        credentials = json.load(creds)
+
+    cnx = mysql.connector.connect(user=credentials['DB_USER'], password=credentials['DB_PASSWORD'], host=credentials['DB_HOST'], database=credentials['DB_DATABASE'])
+    return(cnx)
 
 app = Flask(__name__)
 
@@ -10,7 +20,15 @@ def login():
 
 @app.route('/kids.html')
 def kids():
-    kidslist = [('Kalle','kalle'),('Lisa','lisa')]
+    connection = open_db()
+    cursor = connection.cursor()
+
+    query = ("SELECT firstname, username FROM users WHERE child=1")
+    cursor.execute(query)
+
+    kidslist = cursor.fetchall() # [(firstname,username), ...]
+    cursor.close()
+    connection.close()
     return render_template('kids.html', kids = kidslist)
 
 
