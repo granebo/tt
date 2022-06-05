@@ -2,9 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{kid}}</title>
+    <title>{{name}}</title>
 </head>
 <body>
-    Info on user: {{kid}}
+<H1> {{name}}</H1>
+    Remaining time: {{remaining}}<br>
+
+    {% if ongoing == 'True' %}
+        Ongoing activity: {{activity}}<br>
+        Started: {{started}}<br><br>
+        <form action="/kid.html" method="post">
+            <input type="hidden" name="action" value="stop">
+            <input type="hidden" name="username" value="{{username}}">
+            <label for="backdate">Earlier start (minutes):</label><br>
+            <input type="text" name="backdate" id="backdate" value="0"><br><br>
+            <input type="submit" value="Stop">
+        </form>
+    {% else %}
+        <form action="/kid.html" method="post">
+            <input type="hidden" name="action" value="start">
+            <input type="hidden" name="username" value="{{username}}">
+            <label for="backdate">Earlier start (minutes):</label><br>
+            <input type="text" name="backdate" id="backdate" value="0"><br><br>
+            <label for="activities">Choose activity:</label><br>
+            <select id="activities" name="activities">
+            {% for activity in activities %}
+                <option value="{{activity[0]}}">{{activity[1]}}</option>
+            {% endfor %}
+            </select><br><br>
+            <input type="submit" value="Start">
+        </form>
+    {% endif %}
+
 </body>
 </html>

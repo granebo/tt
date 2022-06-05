@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <UL>
-    {% for name,username in kids %}
-        <LI><A href="{{ url_for('kid') }}?kid={{username}}">{{name}}</A></LI>
+    {% for user,name,remaining,activity,ongoing in kids %}
+        <LI>
+            <A href="{{ url_for('kid') }}?username={{user}}">{{name}}</A></BR>
+            Tid kvar: {{remaining}}</BR>
+            {% if activity != None %}
+            {{activity}} ({{ongoing}})</BR>
+            {% endif %}</BR>
+        </LI>
     {% endfor %}
     </UL>
 </head>
